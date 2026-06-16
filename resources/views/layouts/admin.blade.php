@@ -42,10 +42,29 @@
         .card-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
 
         /* ── Table ── */
+        .table-wrap { border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; background: #fff; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; padding: 0 16px 10px; }
-        td { padding: 13px 16px; border-top: 1px solid #f1f5f9; font-size: 14px; }
-        tr:hover td { background: #f8fafc; }
+        thead tr { background: #f8fafc; }
+        th { text-align: left; font-size: 10.5px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: .8px; padding: 13px 20px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
+        td { padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-size: 14px; color: #334155; vertical-align: middle; }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr { transition: background .1s; }
+        tbody tr:hover td { background: #f8fafc; }
+
+        /* ── User cell ── */
+        .user-cell { display: flex; align-items: center; gap: 12px; }
+        .u-avatar { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+        .u-name { font-weight: 600; color: #1e293b; font-size: 14px; }
+        .u-email { font-size: 12px; color: #94a3b8; margin-top: 1px; }
+
+        /* ── Table empty state ── */
+        .table-empty { text-align: center; padding: 56px 20px; color: #94a3b8; }
+        .table-empty svg { width: 40px; height: 40px; margin: 0 auto 12px; display: block; stroke: #cbd5e1; }
+        .table-empty p { font-size: 14px; }
+
+        /* ── Action button ── */
+        .btn-icon { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; border: 1px solid #fee2e2; background: #fff5f5; color: #ef4444; cursor: pointer; transition: all .15s; font-family: inherit; }
+        .btn-icon:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
 
         /* ── Buttons ── */
         .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; transition: opacity .15s; font-family: inherit; }
