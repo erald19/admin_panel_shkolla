@@ -9,10 +9,22 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function students()
     {
-        $users = User::where('id', '!=', auth()->id())->latest()->paginate(20);
-        return view('admin.users.index', compact('users'));
+        $users = User::where('role', 0)->latest()->paginate(20);
+        return view('admin.users.students', compact('users'));
+    }
+
+    public function teachers()
+    {
+        $users = User::where('role', 2)->latest()->paginate(20);
+        return view('admin.users.teachers', compact('users'));
+    }
+
+    public function admins()
+    {
+        $users = User::where('role', 1)->where('id', '!=', auth()->id())->latest()->paginate(20);
+        return view('admin.users.admins', compact('users'));
     }
 
     public function store(Request $request)
@@ -27,23 +39,28 @@ class UserController extends Controller
             'role'     => 'required|integer|in:0,1,2',
         ];
 
-        if ($role === 0) { // student
+        if ($role === 0) {
             $rules['age']         = 'nullable|integer|min:1|max:99';
             $rules['numri_amzes'] = 'nullable|string|max:100';
             $rules['grade']       = 'nullable|string|max:20';
         }
 
-        if ($role === 2) { // teacher
+        if ($role === 2) {
             $rules['age'] = 'nullable|integer|min:1|max:99';
         }
 
-        $data = $request->validate($rules);
+        $data             = $request->validate($rules);
         $data['password'] = Hash::make($data['password']);
 
         User::create($data);
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User created successfully.');
+        $redirect = match ($role) {
+            0       => 'admin.users.students',
+            2       => 'admin.users.teachers',
+            default => 'admin.users.admins',
+        };
+
+        return redirect()->route($redirect)->with('success', 'User created successfully.');
     }
 
     public function destroy(User $user)

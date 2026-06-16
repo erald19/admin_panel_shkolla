@@ -20,6 +20,19 @@
         .nav-link:hover { background: rgba(255,255,255,.07); color: #fff; }
         .nav-link.active { background: #4f46e5; color: #fff; }
         .nav-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        /* ── Sidebar dropdown ── */
+        .nav-parent { width: 100%; text-align: left; background: none; border: none; font-family: inherit; cursor: pointer; justify-content: flex-start; }
+        .nav-chevron { width: 14px; height: 14px; margin-left: auto; flex-shrink: 0; transition: transform .2s; }
+        .nav-chevron.rotated { transform: rotate(90deg); }
+        .nav-sub { display: none; padding-left: 10px; margin-top: 2px; }
+        .nav-sub.open { display: block; }
+        .nav-sublink { display: flex; align-items: center; gap: 9px; padding: 8px 12px; border-radius: 7px; color: rgba(255,255,255,.45); text-decoration: none; font-size: 13px; font-weight: 500; margin-bottom: 1px; transition: all .15s; }
+        .nav-sublink:hover { background: rgba(255,255,255,.06); color: rgba(255,255,255,.8); }
+        .nav-sublink.active { color: #fff; background: rgba(79,70,229,.35); }
+        .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; opacity: .6; }
+        .nav-sublink.active .nav-dot { opacity: 1; background: #818cf8; }
+
         .sidebar-footer { padding: 16px; border-top: 1px solid rgba(255,255,255,.08); }
         .admin-name { color: rgba(255,255,255,.7); font-size: 13px; font-weight: 500; }
         .logout-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; color: rgba(255,255,255,.4); font-size: 12px; text-decoration: none; background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; }
@@ -127,10 +140,24 @@
             Dashboard
         </a>
         <div class="nav-section">Management</div>
-        <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+
+        {{-- Users dropdown --}}
+        <button class="nav-link nav-parent" onclick="toggleUsers()">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             Users
-        </a>
+            <svg class="nav-chevron" id="usersChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <div class="nav-sub" id="usersSub">
+            <a href="{{ route('admin.users.students') }}" class="nav-sublink {{ request()->routeIs('admin.users.students') ? 'active' : '' }}">
+                <span class="nav-dot"></span> Students
+            </a>
+            <a href="{{ route('admin.users.teachers') }}" class="nav-sublink {{ request()->routeIs('admin.users.teachers') ? 'active' : '' }}">
+                <span class="nav-dot"></span> Teachers
+            </a>
+            <a href="{{ route('admin.users.admins') }}" class="nav-sublink {{ request()->routeIs('admin.users.admins') ? 'active' : '' }}">
+                <span class="nav-dot"></span> Admins
+            </a>
+        </div>
     </nav>
     <div class="sidebar-footer">
         <div class="admin-name">{{ auth()->user()->name }}</div>
@@ -161,5 +188,17 @@
 </div>
 
 @stack('modals')
+
+<script>
+    function toggleUsers() {
+        document.getElementById('usersSub').classList.toggle('open');
+        document.getElementById('usersChevron').classList.toggle('rotated');
+    }
+    // Auto-open when on any users page
+    if ({{ request()->routeIs('admin.users.*') ? 'true' : 'false' }}) {
+        document.getElementById('usersSub').classList.add('open');
+        document.getElementById('usersChevron').classList.add('rotated');
+    }
+</script>
 </body>
 </html>
